@@ -19,6 +19,7 @@ fn main() {
 		.insert_resource(ClearColor(Color::CYAN))
 		.add_plugins(DefaultPlugins)
 		.add_startup_system(setup)
+		.add_system(keyboard_input)
 		.run();
 }
 
@@ -33,4 +34,17 @@ fn setup(mut commands: Commands) {
 //      * d -> fuchsia
 // Don't forget to add your system to the app in `main()`!
 
-//<Your code here>
+fn keyboard_input(keys: Res<Input<KeyCode>>, mut clear_color: ResMut<ClearColor>, ){
+	if keys.just_pressed(KeyCode::W){
+		clear_color.0 = Color::RED;
+	}
+	if keys.just_pressed(KeyCode::A){
+		clear_color.0 = Color::BLUE;
+	}
+	if keys.just_pressed(KeyCode::S){
+		clear_color.0 = Color::GREEN;
+	}
+	if keys.just_pressed(KeyCode::D){
+		clear_color.0 = Color::FUCHSIA;
+	}
+}

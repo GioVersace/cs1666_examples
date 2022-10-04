@@ -8,6 +8,8 @@ const WIN_W: f32 = 1280.;
 const WIN_H: f32 = 720.;
 const PLAYER_SZ: f32 = 32.;
 
+
+
 #[derive(Component)]
 struct Player;
 
@@ -42,6 +44,7 @@ fn setup(mut commands: Commands) {
 		.insert(Player);
 }
 
+
 fn move_player(
 	input: Res<Input<KeyCode>>,
 	mut player: Query<&mut Transform, With<Player>>,
@@ -50,9 +53,11 @@ fn move_player(
 
 	let mut x_vel = 0.;
 	let mut y_vel = 0.;
+	
 
 	if input.pressed(KeyCode::A) {
 		x_vel -= 5.;
+		
 	}
 
 	if input.pressed(KeyCode::D) {
@@ -61,14 +66,41 @@ fn move_player(
 
 	if input.pressed(KeyCode::W) {
 		y_vel += 5.;
+			
 	}
 
 	if input.pressed(KeyCode::S) {
 		y_vel -= 5.;
+		
 	}
 
+	if input.pressed(KeyCode::S) && input.pressed(KeyCode::A){
+		y_vel = -2.5;
+		x_vel = -2.5;
+		
+	}
+	if input.pressed(KeyCode::S) && input.pressed(KeyCode::D){
+		y_vel = -2.5;
+		x_vel = 2.5;
+		
+	}
+	if input.pressed(KeyCode::W) && input.pressed(KeyCode::A){
+		y_vel = 2.5;
+		x_vel = -2.5;
+		
+	}
+	if input.pressed(KeyCode::W) && input.pressed(KeyCode::D){
+		y_vel = 2.5;
+		x_vel = 2.5;
+		
+	}
+	
+	
 	player_transform.translation.x += x_vel;
 	player_transform.translation.y += y_vel;
+
+	player_transform.translation.x = player_transform.translation.x.clamp((-WIN_W/2.) + (PLAYER_SZ/2.), (WIN_W/2.) - (PLAYER_SZ/2.));
+	player_transform.translation.y = player_transform.translation.y.clamp((-WIN_H/2.) + (PLAYER_SZ/2.) , (WIN_H/2.) - (PLAYER_SZ/2.));
 }
 
 /* TODO: 
@@ -77,3 +109,5 @@ fn move_player(
  * How do we stay inside the window?
  * How do we avoid breaking the speed limit on the diagonal?
  */
+
+

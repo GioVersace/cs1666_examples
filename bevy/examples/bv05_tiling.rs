@@ -44,7 +44,10 @@ fn setup(
 
 	//TODO: load the sprite sheet stored in `bricks.png`
 
-	//<Your code here>
+	let brick_handle = asset_server.load("bricks.png");
+	let brick_atlas = TextureAtlas::from_grid(brick_handle, Vec2::splat(TILE_SIZE), 1, 1);
+	let brick_atlas_len = brick_atlas.textures.len();
+	let brick_atlas_handle = texture_atlases.add(brick_atlas);
 
 	commands.spawn_bundle(Camera2dBundle::default());
 
@@ -76,7 +79,31 @@ fn setup(
 	}
 
 	//TODO: Place brick tiles along the bottom of the entire window
+	let mut count: f32 = 0.;
 
-	//<Your code here>
+	for i in 0..15 {
+		
+		let t = Vec3::new(
+			-x_bound + (TILE_SIZE * count),
+			-y_bound,
+			900.,
+		);
+		count += 1.;
+		commands
+			.spawn_bundle(SpriteSheetBundle {
+				texture_atlas: brick_atlas_handle.clone(),
+				transform: Transform {
+					translation: t,
+					..default()
+				},
+				sprite: TextureAtlasSprite {
+					index: i % brick_atlas_len,
+					..default()
+				},
+				..default()
+			})
+			.insert(Brick);
+		}
+			
 	
 }
