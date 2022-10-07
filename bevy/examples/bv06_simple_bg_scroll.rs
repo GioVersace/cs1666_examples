@@ -1,6 +1,6 @@
 use bevy::{
 	window::PresentMode,
-	prelude::*,	
+	prelude::*, time::TimeReceiver,	
 };
 use std::convert::From;
 
@@ -58,6 +58,7 @@ fn main() {
 		.add_plugins(DefaultPlugins)
 		.add_startup_system(setup)
 		.add_system(move_player)
+		.add_system(screen_scroll)
 		.run();
 }
 
@@ -102,7 +103,42 @@ fn setup(
 //TODO: Write a system to scroll the background
 // Don't forget to add your system to the app in `main()`!
 
-//<Your code here>
+fn screen_scroll(
+	time: Res<Time>,
+	mut img: Query<(&mut Transform, &mut Velocity), (With<Background>, Without<Player>)>,
+){
+	let deltat = time.delta_seconds();// gets the time between each call of this system to help calculate the change in position
+
+	for (mut pt,pv) in img.iter_mut() {// iterates through each of the backgrounds, there are 2 here so the system
+																	// gets confused and causes an error so we have to do this
+		let mut change = pv.velocity * deltat;// changes the background regardless of the refresh rate
+
+		
+		let mut new_pos = pt.translation + Vec3::new(// creates the new position of the current background it is on
+		-change.x,
+		0.,
+		0.,
+	);
+
+	if -change.x + pt.translation.x < -WIN_W{// check to see if the background goes off the screen
+			change.x = 2. * WIN_W;
+			new_pos = pt.translation + Vec3::new(// sends the screen that just went past the player to the front to come back around
+				change.x,
+				0.,
+				0.,
+			);
+
+		}
+
+		
+		pt.translation = new_pos;// updates the current positon of the background
+		
+	}
+	
+
+	
+
+}
 
 fn move_player(
 	time: Res<Time>,

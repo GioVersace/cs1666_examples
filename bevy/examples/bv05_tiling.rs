@@ -10,6 +10,7 @@ const WIN_H: f32 = 720.;
 
 const TILE_SIZE: f32 = 100.;
 const NUM_BIRDS: usize = 8;
+const NUM_TILES: usize = 13;
 
 #[derive(Component)]
 struct Bird;
@@ -45,7 +46,7 @@ fn setup(
 	//TODO: load the sprite sheet stored in `bricks.png`
 
 	let brick_handle = asset_server.load("bricks.png");
-	let brick_atlas = TextureAtlas::from_grid(brick_handle, Vec2::splat(TILE_SIZE), 1, 1);
+	let brick_atlas = TextureAtlas::from_grid(brick_handle, Vec2::splat(TILE_SIZE), 4, 1);
 	let brick_atlas_len = brick_atlas.textures.len();
 	let brick_atlas_handle = texture_atlases.add(brick_atlas);
 
@@ -81,18 +82,18 @@ fn setup(
 	//TODO: Place brick tiles along the bottom of the entire window
 	let mut count: f32 = 0.;
 
-	for i in 0..15 {
+	for i in 0..NUM_TILES {
 		
 		let t = Vec3::new(
 			-x_bound + (TILE_SIZE * count),
 			-y_bound,
-			900.,
+			800.,
 		);
 		count += 1.;
 		commands
 			.spawn_bundle(SpriteSheetBundle {
 				texture_atlas: brick_atlas_handle.clone(),
-				transform: Transform {
+				transform: Transform {// moving the actual sprite
 					translation: t,
 					..default()
 				},

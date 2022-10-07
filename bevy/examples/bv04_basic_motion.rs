@@ -7,6 +7,7 @@ const TITLE: &str = "bv03 Basic Motion";
 const WIN_W: f32 = 1280.;
 const WIN_H: f32 = 720.;
 const PLAYER_SZ: f32 = 32.;
+const VELOCITY: f32 = 5.;
 
 
 
@@ -53,45 +54,45 @@ fn move_player(
 
 	let mut x_vel = 0.;
 	let mut y_vel = 0.;
-	
+	let diag_velocity = VELOCITY/1.41;
 
 	if input.pressed(KeyCode::A) {
-		x_vel -= 5.;
+		x_vel -= VELOCITY;
 		
 	}
 
 	if input.pressed(KeyCode::D) {
-		x_vel += 5.;
+		x_vel += VELOCITY;
 	}
 
 	if input.pressed(KeyCode::W) {
-		y_vel += 5.;
+		y_vel += VELOCITY;
 			
 	}
 
 	if input.pressed(KeyCode::S) {
-		y_vel -= 5.;
+		y_vel -= VELOCITY;
 		
 	}
 
 	if input.pressed(KeyCode::S) && input.pressed(KeyCode::A){
-		y_vel = -2.5;
-		x_vel = -2.5;
+		y_vel = -diag_velocity;
+		x_vel = -diag_velocity;
 		
 	}
 	if input.pressed(KeyCode::S) && input.pressed(KeyCode::D){
-		y_vel = -2.5;
-		x_vel = 2.5;
+		y_vel = -diag_velocity;
+		x_vel = diag_velocity;
 		
 	}
 	if input.pressed(KeyCode::W) && input.pressed(KeyCode::A){
-		y_vel = 2.5;
-		x_vel = -2.5;
+		y_vel = diag_velocity;
+		x_vel = -diag_velocity;
 		
 	}
 	if input.pressed(KeyCode::W) && input.pressed(KeyCode::D){
-		y_vel = 2.5;
-		x_vel = 2.5;
+		y_vel = diag_velocity;
+		x_vel = diag_velocity;
 		
 	}
 	
